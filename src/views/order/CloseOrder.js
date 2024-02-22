@@ -175,7 +175,7 @@ const CloseOrder = () => {
         'Content-Type':'application/json',
         'Authorization': `Bearer ${userToken}`
       }
-      const response = await axios.put(`http://127.0.0.1:8000/api/v1/order/${order.id}`, {
+      const response = await axios.put(`http://139.59.39.167/api/v1/order/${order.id}`, {
         user_id: order.user_id,
         symbol: order.symbol,
         quantity:order.quantity,

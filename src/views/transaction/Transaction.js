@@ -37,7 +37,7 @@ const Transaction = () => {
 
   const fetchData = async (user_id) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/v1/transaction/user/${user_id}`);
+      const response = await axios.get(`http://139.59.39.167/api/v1/transaction/user/${user_id}`);
       console.log("manish")
       console.log(response.data.data); // Log the response data
       setTransactionData(response.data.data) // Return the response data if needed

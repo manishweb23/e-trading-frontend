@@ -58,7 +58,7 @@ const Watchlist = () => {
   // Function to fetch data
   const fetchInstrumentlist = async (instrument_type, symbol_name) => {    
     try {
-      var url = `http://127.0.0.1:8000/api/v1/instrument/all/type/${instrument_type}/name/${symbol_name}?limit=100&offset=0`
+      var url = `http://139.59.39.167/api/v1/instrument/all/type/${instrument_type}/name/${symbol_name}?limit=100&offset=0`
       const response = await fetch(url)
     
       const result = await response.json()

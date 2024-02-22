@@ -106,7 +106,7 @@ const Order = () => {
   const fetchOptions = async () => {
     try {
       // Make an API call to fetch options based on symbolValue
-      const response = await fetch(`http://127.0.0.1:8000/api/v1/instrument/expiry/symbol/${symbolValue}`);
+      const response = await fetch(`http://139.59.39.167/api/v1/instrument/expiry/symbol/${symbolValue}`);
       const data = await response.json();
       // Update options state with fetched data
       console.log(data.data.expiry)
@@ -120,7 +120,7 @@ const Order = () => {
   const fetchTradingSymbol = async () => {
     try {
       // Make an API call to fetch options based on symbolValue
-      const response = await fetch(`http://127.0.0.1:8000/api/v1/instrument/symbol/${symbolValue}/expiry/${selectedExpiry}`);
+      const response = await fetch(`http://139.59.39.167/api/v1/instrument/symbol/${symbolValue}/expiry/${selectedExpiry}`);
       const data = await response.json();
       // Update options state with fetched data
       console.log("manish-----0000")
@@ -200,7 +200,7 @@ const Order = () => {
     // // Function to fetch data
     // const fetchOpenOrder = async () => {
     //   try {
-    //     const response = await fetch('http://127.0.0.1:8000/api/v1/order/filter/user/1/type/open')
+    //     const response = await fetch('http://139.59.39.167/api/v1/order/filter/user/1/type/open')
     //     const result = await response.json()
     //     setOpenOrders(result)
     //     console.log(result)
@@ -251,7 +251,7 @@ const Order = () => {
       console.log(headers)
       console.log(postData)
       // Make a POST request using axios.post
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/order', postData, {headers:headers})
+      const response = await axios.post('http://139.59.39.167/api/v1/order', postData, {headers:headers})
       // console.log("jjkkuuiopp")
       // console.log(response.status)
       setResponseMessage(response.data)
