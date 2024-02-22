@@ -39,7 +39,7 @@ const Login = () => {
         setLoginData(response.data)
         setError(null); 
         console.log("Data saved successfully");
-        navigate(`/dashboard`)
+        navigate(`/watchlist`)
       } catch (e) {
           console.error("Error saving data to localStorage:", e);
       }
