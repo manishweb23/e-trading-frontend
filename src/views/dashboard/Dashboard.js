@@ -110,7 +110,7 @@ const Dashboard = () => {
             progress={{ value: 75 }}
             text="Widget helper text"
             title="P&L"
-            value="Profite INR 30000"
+            value="Profit INR 30000"
           />
         </CCol>
       </CRow>
