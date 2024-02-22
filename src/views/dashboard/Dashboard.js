@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 
 import {
   CWidgetStatsC,
@@ -56,9 +56,19 @@ import avatar6 from 'src/assets/images/avatars/6.jpg'
 import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 
+import { useNavigate } from 'react-router-dom';
+
 const Dashboard = () => {
   const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
-
+  const navigate = useNavigate()
+  useEffect(() => {
+    const userDataString = localStorage.getItem('userData')
+    let userData = JSON.parse(userDataString) 
+    if(!userData){
+      localStorage.clear();
+      navigate(`/login`)
+    }
+  },[])
   
   return (
     <>
