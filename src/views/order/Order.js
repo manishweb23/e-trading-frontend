@@ -246,6 +246,7 @@ const Order = () => {
     try {
       const headers = {
         'Content-Type':'application/json',
+        'Accept':'*/*',
         'Authorization': `Bearer ${userToken}`
       }
       console.log(headers)
