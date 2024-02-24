@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 
 import {
+  CPagination,
+  CPaginationItem,
   CFormSelect,
   CInputGroup,
   CInputGroupText,
@@ -40,7 +42,8 @@ const Watchlist = () => {
   const [postData, setPostData] = useState({ name: '', email: '' })
   const [responseMessage, setResponseMessage] = useState('')
   const [loading, setLoading] = useState(false)
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   // const history = useHistory()
   const navigate = useNavigate()
 
@@ -52,14 +55,15 @@ const Watchlist = () => {
     return () => {
       // Perform cleanup (unsubscribe, clear intervals, etc.)
     }
-  }, [])
+  }, [currentPage, pageSize])
   
  
   // Function to fetch data
   const fetchInstrumentlist = async (instrument_type, symbol_name) => {   
     instrument_type = 'OPT' 
+    const offset = (currentPage - 1) * pageSize;
     try {
-      var url = `http://139.59.39.167/api/v1/instrument/all/type/${instrument_type}/name/${symbol_name}?limit=100&offset=0`
+      var url = `http://139.59.39.167/api/v1/instrument/all/type/${instrument_type}/name/${symbol_name}?limit=100&offset=${offset}`
       const response = await fetch(url)
     
       const result = await response.json()
@@ -70,6 +74,7 @@ const Watchlist = () => {
       console.error('Error fetching data:', error)
     }
   }
+
 
   const handleInstrumentTypeChange = async (e) => {
     setInstrumentsType(e.target.value)
@@ -155,6 +160,30 @@ const Watchlist = () => {
             </CCardBody>
           </CCard>
         </CCol>
+      </CRow>
+      <CRow>
+        
+
+        <CPagination aria-label="Page navigation example">
+          <CPaginationItem aria-label="Previous" disabled>
+            <span aria-hidden="true">&laquo;</span>
+          </CPaginationItem>
+          
+          {instruments.length !== 0 &&(
+            <>
+            {[...Array(pageSize)].map((_, index) => (
+              <CPaginationItem key={index} active={currentPage === index + 1} onClick={(index)=>setCurrentPage(index)}>
+                {index + 1}
+              </CPaginationItem>
+            ))}
+            </>
+            )}
+          <CPaginationItem aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </CPaginationItem>
+        </CPagination>
+        
+        
       </CRow>
     </>
   )

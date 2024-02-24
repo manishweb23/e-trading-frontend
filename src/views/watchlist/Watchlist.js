@@ -1,114 +1,82 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'
-
+import axios from 'axios';
 import {
+  CRow,
+  CPagination,
+  CPaginationItem,
   CFormSelect,
   CInputGroup,
-  CInputGroupText,
   CFormInput,
-  CAvatar,
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
-  CProgress,
-  CRow,
   CTable,
   CTableBody,
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
   CTableRow,
-  CWidgetStatsA,
-} from '@coreui/react'
-import { CChartLine } from '@coreui/react-chartjs'
-import { getStyle, hexToRgba } from '@coreui/utils'
-import CIcon from '@coreui/icons-react'
+} from '@coreui/react';
 import { headers } from '../utils';
 
-
-
 const Watchlist = () => {
-  const [instruments, setInstruments] = useState([])
-  
-  const [findSymbol, setFindSymbol] = useState('')
-  const [instrumentsType, setInstrumentsType] = useState('OPT')
-  const [postData, setPostData] = useState({ name: '', email: '' })
-  const [responseMessage, setResponseMessage] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  // const history = useHistory()
-  const navigate = useNavigate()
+  const [instruments, setInstruments] = useState([]);
+  const [findSymbol, setFindSymbol] = useState('');
+  const [instrumentsType, setInstrumentsType] = useState('OPT');
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(100);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Call the fetch function
-    fetchInstrumentlist("EQUITY",null)
+    fetchInstrumentlist();
+  }, [currentPage, pageSize, instrumentsType, findSymbol]);
 
-    // Cleanup function (optional)
-    return () => {
-      // Perform cleanup (unsubscribe, clear intervals, etc.)
-    }
-  }, [])
-  
- 
-  // Function to fetch data
-  const fetchInstrumentlist = async (instrument_type, symbol_name) => {   
-    instrument_type = 'OPT' 
+  const fetchInstrumentlist = async () => {
+    const instrumentType = 'OPT';
+    const offset = (currentPage - 1) * pageSize;
     try {
-      var url = `http://139.59.39.167/api/v1/instrument/all/type/${instrument_type}/name/${symbol_name}?limit=100&offset=0`
-      const response = await fetch(url)
-    
-      const result = await response.json()
-      setInstruments(result.data)
-      console.log("manish334")
-      console.log(result)
+      const url = `http://139.59.39.167/api/v1/instrument/all/type/${instrumentType}/name/${findSymbol?findSymbol:'null'}?limit=${pageSize}&offset=${offset}`;
+      const response = await fetch(url);
+      const result = await response.json();
+      setInstruments(result.data);
     } catch (error) {
-      console.error('Error fetching data:', error)
+      console.error('Error fetching data:', error);
     }
-  }
+  };
 
-  const handleInstrumentTypeChange = async (e) => {
-    setInstrumentsType(e.target.value)
-    fetchInstrumentlist(e.target.value,null)
-  }
+  const handleInstrumentTypeChange = (e) => {
+    setInstrumentsType(e.target.value);
+  };
 
-  const handleInstrumentSearch = async () => {
-    fetchInstrumentlist(instrumentsType,findSymbol)
-  }
+  const handleInstrumentSearch = () => {
+    fetchInstrumentlist();
+  };
 
-  const placeOrder = async (e) => {
-    // setPlaceOrderData(e)
-    const jsonString = JSON.stringify(e)
-    console.log(jsonString)
-    localStorage.setItem('placeOrderData', e)
-    // history.push('/order')
-    navigate(`/order?urlTradingSymbol=${e[2]}`)
-  }
+  const placeOrder = (item) => {
+    navigate(`/order?urlTradingSymbol=${item[2]}`);
+  };
 
   return (
     <>
       <CRow>
-        {/* <CCol sm={3}/> */}
         <CCol sm={3}>
-          <CFormSelect value={instrumentsType} onChange={(e) => handleInstrumentTypeChange(e)}>
-            {/* <option value={"EQUITY"}>EQUITY</option>
-            <option value={"INDEX"}>INDEX</option> */}
-            <option value={"OPT"}>OPTION</option>
+          <CFormSelect value={instrumentsType} onChange={handleInstrumentTypeChange}>
+            <option value="OPT">OPTION</option>
           </CFormSelect>
         </CCol>
         <CCol sm={4}>
           <CInputGroup className="mb-4">
-            <CFormInput value={findSymbol} onChange={(e)=> setFindSymbol(e.target.value)}placeholder="Enter Symbol" aria-label="Enter Symbol" aria-describedby="basic-addon1"/>
+            <CFormInput value={findSymbol} onChange={(e) => setFindSymbol(e.target.value)} placeholder="Enter Symbol" />
           </CInputGroup>
         </CCol>
         <CCol sm={2}>
           <div className="d-grid gap-2">
-              <CButton color="success" onClick={handleInstrumentSearch}>Search</CButton>
-            </div>
+            <CButton color="success" onClick={handleInstrumentSearch}>Search</CButton>
+          </div>
         </CCol>
       </CRow>
       <CRow>
@@ -121,32 +89,20 @@ const Watchlist = () => {
                   <CTableRow>
                     <CTableHeaderCell>Symbol</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Type</CTableHeaderCell>
-                    
                     <CTableHeaderCell>Expiry</CTableHeaderCell>
                     <CTableHeaderCell>Last Price</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Order</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  
                   {instruments.map((item, index) => (
-                    <CTableRow v-for="item in tableItems" key={index}>
-                      <CTableDataCell>
-                        <div>{item[2]}</div>
-                      </CTableDataCell>
+                    <CTableRow key={index}>
+                      <CTableDataCell>{item[2]}</CTableDataCell>
+                      <CTableDataCell className="text-center">{item[11].replace(/_/g, ' ')}</CTableDataCell>
+                      <CTableDataCell className="text-center">{item[5]}</CTableDataCell>
+                      <CTableDataCell>{item[4]}</CTableDataCell>
                       <CTableDataCell className="text-center">
-                        <div>{item[11].replace(/_/g, " ")}</div>
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        <div>{item[5]}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div>{item[4]}</div>
-                      </CTableDataCell>
-                      <CTableDataCell className="text-center">
-                        <CButton color="dark" onClick = {(e) => {
-                          placeOrder(item)
-                          }}>Place Order</CButton>
+                        <CButton color="dark" onClick={() => placeOrder(item)}>Place Order</CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
@@ -156,8 +112,23 @@ const Watchlist = () => {
           </CCard>
         </CCol>
       </CRow>
+      <CRow>
+        <CPagination aria-label="Page navigation example">
+          <CPaginationItem aria-label="Previous" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+            <span aria-hidden="true">&laquo;</span>
+          </CPaginationItem>
+          {[...Array(20)].map((_, index) => (
+            <CPaginationItem key={index} active={currentPage === index + 1} onClick={() => setCurrentPage(index + 1)}>
+              {index + 1}
+            </CPaginationItem>
+          ))}
+          <CPaginationItem aria-label="Next" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === 10}>
+            <span aria-hidden="true">&raquo;</span>
+          </CPaginationItem>
+        </CPagination>
+      </CRow>
     </>
-  )
-}
+  );
+};
 
-export default Watchlist
+export default Watchlist;

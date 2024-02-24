@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react'
-
+import React, {useEffect, useState} from 'react'
+import axios from 'axios'
 import {
   CWidgetStatsC,
   CAvatar,
@@ -46,19 +46,24 @@ import {
   cilUserFemale,
 } from '@coreui/icons'
 
-import avatar1 from 'src/assets/images/avatars/1.jpg'
-import avatar2 from 'src/assets/images/avatars/2.jpg'
-import avatar3 from 'src/assets/images/avatars/3.jpg'
-import avatar4 from 'src/assets/images/avatars/4.jpg'
-import avatar5 from 'src/assets/images/avatars/5.jpg'
-import avatar6 from 'src/assets/images/avatars/6.jpg'
-
-import WidgetsBrand from '../widgets/WidgetsBrand'
-import WidgetsDropdown from '../widgets/WidgetsDropdown'
 
 import { useNavigate } from 'react-router-dom';
 
+
 const Dashboard = () => {
+  const [balance, setBalance] = useState("INR 0")
+  const [tradeCount, setTradeCount] = useState(0)
+  const [tradingBalance, setTradingBalance] = useState(0)
+  const [pL, setPL] = useState(0)
+  
+  const userDataString = localStorage.getItem('userData')
+  let userData = JSON.parse(userDataString) 
+  userData = JSON.parse(userData) 
+  console.log(userData)
+  let userToken = userData.data.token
+  console.log(userToken)
+  const userId = userData.data.user_id
+
   const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
   const navigate = useNavigate()
   useEffect(() => {
@@ -68,8 +73,105 @@ const Dashboard = () => {
       localStorage.clear();
       navigate(`/login`)
     }
-  },[])
+    fetchBalance(userId)
+    fetchTradesCount(userId,'open')
+    fetchTradingBalance(userId)
+    fetchPL(userId)
+  },[userId])
+
+  const fetchBalance = async (userId) =>{
+    const url = `http://139.59.39.167/api/v1/transaction/user/${userId}/balance`;
+    // Set the headers with the Bearer token
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    };
+
+    // Make the GET request using Axios
+    axios.get(url, config)
+      .then(response => {
+        // Handle the successful response
+        console.log('Balance:', response.data.data.balance);
+        setBalance("INR "+ response.data.data.balance)
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error fetching balance:', error);
+    });
+  }
   
+
+  const fetchPL = async (userId) =>{
+    const url = `http://139.59.39.167/api/v1/transaction/user/${userId}/pl`;
+    // Set the headers with the Bearer token
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    };
+
+    // Make the GET request using Axios
+    axios.get(url, config)
+      .then(response => {
+        // Handle the successful response
+        console.log('pl Balance:', response.data.data.balance);
+        setPL("INR "+ (response.data.data.balance).toFixed(2))
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error fetching balance:', error);
+    });
+  }
+
+  const fetchTradesCount = async (userId,tradeType) =>{
+    const url = `http://139.59.39.167/api/v1/order/filter/user/${userId}/type/${tradeType}/count`;
+    
+    // Set the headers with the Bearer token
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    };
+
+    // Make the GET request using Axios
+    axios.get(url, config)
+      .then(response => {
+        // Handle the successful response
+        console.log(response.data.data.count);
+        setTradeCount(response.data.data.count)
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error fetching balance:', error);
+    });
+  }
+
+  const fetchTradingBalance = async (userId) =>{
+    const url = `http://139.59.39.167/api/v1/order/user/${userId}/trading-balance`;
+    // Set the headers with the Bearer token
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    };
+
+    // Make the GET request using Axios
+    axios.get(url, config)
+      .then(response => {
+        // Handle the successful response
+        console.log('T Balance:', response.data.data.balance);
+        let tbalance = response.data.data.balance
+        setTradingBalance("INR "+ tbalance.toFixed(2))
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error fetching balance:', error);
+    });
+  }
+
+
+
   return (
     <>
       <CRow>
@@ -82,7 +184,7 @@ const Dashboard = () => {
             progress={{ color: 'success', value: 75 }}
             text="Widget helper text"
             title="Available Balance"
-            value="INR 100000"
+            value={balance}
           />
         </CCol>
         <CCol xs={6}>
@@ -94,7 +196,7 @@ const Dashboard = () => {
             progress={{ value: 75 }}
             text="Widget helper text"
             title="Open Trades"
-            value="5"
+            value={tradeCount}
           />
         </CCol>
       </CRow>
@@ -108,7 +210,7 @@ const Dashboard = () => {
             progress={{ color: 'primary', value: 75 }}
             text="Widget helper text"
             title="Trading Balance"
-            value="INR 200000"
+            value={tradingBalance}
           />
         </CCol>
         <CCol xs={6}>
@@ -120,7 +222,7 @@ const Dashboard = () => {
             progress={{ value: 75 }}
             text="Widget helper text"
             title="P&L"
-            value="Profit INR 30000"
+            value={pL}
           />
         </CCol>
       </CRow>
