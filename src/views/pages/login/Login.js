@@ -37,7 +37,7 @@ const Login = () => {
         const res_data= JSON.stringify(response.data)
         await localStorage.setItem('userData',JSON.stringify(res_data));
         setLoginData(response.data)
-        setError(null); 
+        setError(null)
         console.log("Data saved successfully");
         navigate(`/watchlist`)
       } catch (e) {
