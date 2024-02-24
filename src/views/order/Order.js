@@ -134,7 +134,7 @@ const Order = () => {
   const storedJsonString = localStorage.getItem('placeOrderData')
   console.log(storedJsonString)
   console.log("kkr")
-  const tradingSymbolsArray =storedJsonString.split(',');
+  const tradingSymbolsArray =storedJsonString?.split(',');
   console.log(tradingSymbolsArray[2])
   const connectWebSocket = async (token,urlTradingSymbol) => {
     console.log("llr")

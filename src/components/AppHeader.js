@@ -23,9 +23,9 @@ import { useNavigate } from 'react-router-dom';
 const AppHeader = () => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
-
+  const userDataString = localStorage.getItem('userData')
   useEffect(()=>{
-    const userDataString = localStorage.getItem('userData')
+    
     if(userDataString == null){
       localStorage.clear();
       navigate(`/login`)
@@ -35,7 +35,7 @@ const AppHeader = () => {
 
   const navigate = useNavigate()
   const logoutFunction = async () => {
-    await localStorage.setItem('userData',null);
+    localStorage.setItem('userData',null);
     localStorage.clear();
     navigate(`/login`)
   }
@@ -73,7 +73,7 @@ const AppHeader = () => {
         <CHeaderNav>
           <CNavItem>
             <CNavLink href="#">
-            <CNavLink href="/#/login" onClick={logoutFunction}>Logout</CNavLink>
+            <CNavLink href="/#/login" onClick={(e)=>logoutFunction()}>Logout</CNavLink>
             </CNavLink>
           </CNavItem>
           {/* <CNavItem>
