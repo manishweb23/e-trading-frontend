@@ -24,11 +24,18 @@ const AppHeader = () => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
-
+  useEffect(()=>{
+    const userDataString = localStorage.getItem('userData')
+    if(userDataString == null){
+      localStorage.clear();
+      navigate(`/login`)
+    }
+  })
  
 
   const navigate = useNavigate()
-  const logoutFunction = () => {
+  const logoutFunction = async () => {
+    await localStorage.setItem('userData',null);
     localStorage.clear();
     navigate(`/login`)
   }
@@ -59,9 +66,9 @@ const AppHeader = () => {
           <CNavItem>
             <CNavLink href="/#/watchlist">Watchlist</CNavLink>
           </CNavItem>
-          <CNavItem>
+          {/* <CNavItem>
             <CNavLink href="#">Settings</CNavLink>
-          </CNavItem>
+          </CNavItem> */}
         </CHeaderNav>
         <CHeaderNav>
           <CNavItem>

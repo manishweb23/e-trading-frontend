@@ -67,12 +67,7 @@ const Dashboard = () => {
   const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
   const navigate = useNavigate()
   useEffect(() => {
-    const userDataString = localStorage.getItem('userData')
-    let userData = JSON.parse(userDataString) 
-    if(!userData){
-      localStorage.clear();
-      navigate(`/login`)
-    }
+    
     fetchBalance(userId)
     fetchTradesCount(userId,'open')
     fetchTradingBalance(userId)
