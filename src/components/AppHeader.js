@@ -35,7 +35,7 @@ const AppHeader = () => {
 
   const navigate = useNavigate()
   const logoutFunction = async () => {
-    localStorage.setItem('userData',null);
+    // localStorage.setItem('userData',null);
     localStorage.clear();
     navigate(`/login`)
   }
