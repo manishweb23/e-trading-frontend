@@ -395,22 +395,13 @@ const Order = () => {
             
             </CCol>
           </CRow>
-          <CRow>
-            <CCol sm={2}/>
-            <CCol sm={4}>
-              <br/>
-              <CButton color="success" style={{width:'100%'}} onClick={(e) => openOrder()}>Buy</CButton>
-            </CCol>
-            <CCol sm={4}>
-              <br/>
-              <CButton color="danger" style={{width:'100%'}} onClick={(e) => openSellOrder()}>Sell</CButton>
-            </CCol>
-          </CRow>
-            {/* <div className="d-grid gap-2">
+          {tradingSymbolsArray[9][0] == 'O' && (
+            <div className="d-grid gap-2">
               <br/>
               <CButton color="success" onClick={(e) => openOrder()}>Place Order</CButton>
-            </div> */}
-          {/* {tradingSymbolsArray[9][0] !== 'O' && (
+            </div>
+          )}
+          {tradingSymbolsArray[9][0] !== 'O' && (
             <CRow>
             <CCol sm={6}>
               <div className="d-grid gap-2">
@@ -423,7 +414,7 @@ const Order = () => {
               </div>
             </CCol>
           </CRow>
-          )} */}
+          )}
         </CCol>
       </CRow>
     </>
