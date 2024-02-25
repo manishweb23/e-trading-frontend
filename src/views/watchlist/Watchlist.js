@@ -166,7 +166,7 @@ const Watchlist = () => {
           </CCard>
         </CCol>
       </CRow>
-      <CRow>
+      {/* <CRow>
         
 
         <CPagination aria-label="Page navigation example">
@@ -187,7 +187,7 @@ const Watchlist = () => {
             <span aria-hidden="true">&raquo;</span>
           </CPaginationItem>
         </CPagination>
-      </CRow>
+      </CRow> */}
     </>
   )
 }

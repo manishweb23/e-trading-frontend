@@ -34,6 +34,7 @@ const Login = () => {
       });
       try{
         console.log(response.data)
+        console.log(response.status)
         const res_data= JSON.stringify(response.data)
         await localStorage.setItem('userData',JSON.stringify(res_data));
         setLoginData(response.data)
@@ -43,10 +44,9 @@ const Login = () => {
       } catch (e) {
           console.error("Error saving data to localStorage:", e);
       }
-      
-
-      
+           
     } catch (error) {
+      alert("Wrong credentials!")
       console.error('Error:', error);
       setError(error); 
     }

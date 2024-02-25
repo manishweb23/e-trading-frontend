@@ -133,11 +133,9 @@ const Order = () => {
 
   const storedJsonString = localStorage.getItem('placeOrderData')
   console.log(storedJsonString)
-  console.log("kkr")
   const tradingSymbolsArray =storedJsonString.split(',');
   console.log(tradingSymbolsArray[2])
   const connectWebSocket = async (token,urlTradingSymbol) => {
-    console.log("llr")
     console.log(urlTradingSymbol)
     try {
       const wsUrl = await getUrl(token);
@@ -197,25 +195,6 @@ const Order = () => {
     
     connectWebSocket(token,tradingSymbolsArray[0]);
 
-    // // Function to fetch data
-    // const fetchOpenOrder = async () => {
-    //   try {
-    //     const response = await fetch('http://139.59.39.167/api/v1/order/filter/user/1/type/open')
-    //     const result = await response.json()
-    //     setOpenOrders(result)
-    //     console.log(result)
-    //   } catch (error) {
-    //     console.error('Error fetching data:', error)
-    //   }
-    // }
-
-    // // Call the fetch function
-    // fetchOpenOrder()
-
-    // if (symbolValue.trim() !== '') {
-    //   fetchOptions()
-    // }
-    // Cleanup function (optional)
     return () => {
       // Perform cleanup (unsubscribe, clear intervals, etc.)
     }
@@ -253,8 +232,6 @@ const Order = () => {
       console.log(postData)
       // Make a POST request using axios.post
       const response = await axios.post('http://139.59.39.167/api/v1/order', postData, {headers:headers})
-      // console.log("jjkkuuiopp")
-      // console.log(response.status)
       setResponseMessage(response.data)
       // Access the order_id field
       const msg=response.data.data.message
