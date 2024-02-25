@@ -49,7 +49,7 @@ const Watchlist = () => {
 
   useEffect(() => {
     // Call the fetch function
-    fetchInstrumentlist("EQUITY",null)
+    fetchInstrumentlist("FUTSTK",null)
 
     // Cleanup function (optional)
     return () => {
@@ -59,8 +59,7 @@ const Watchlist = () => {
   
  
   // Function to fetch data
-  const fetchInstrumentlist = async (instrument_type, symbol_name) => {   
-    instrument_type = 'OPT' 
+  const fetchInstrumentlist = async (instrument_type, symbol_name) => {
     const offset = (currentPage - 1) * pageSize;
     try {
       var url = `http://139.59.39.167/api/v1/instrument/all/type/${instrument_type}/name/${symbol_name}?limit=100&offset=${offset}`
@@ -98,11 +97,17 @@ const Watchlist = () => {
     <>
       <CRow>
         {/* <CCol sm={3}/> */}
-        <CCol sm={3}>
+        <CCol sm={4}>
           <CFormSelect value={instrumentsType} onChange={(e) => handleInstrumentTypeChange(e)}>
-            {/* <option value={"EQUITY"}>EQUITY</option>
-            <option value={"INDEX"}>INDEX</option> */}
-            <option value={"OPT"}>OPTION</option>
+            <option value={"FUTSTK"}>Futures on Stock</option>
+            <option value={"FUTIDX"}>Futures on Index</option>
+            <option value={"FUTCOM"}>Futures on Commodity</option>
+            <option value={"OPTSTK"}>Options on Stock</option>
+            <option value={"OPTIDX"}>Options on Index</option>
+            <option value={"OPTCOM"}>Option on Commodity</option>
+            <option value={"FUTCUR"}>Futures on Currency</option>
+            <option value={"OPTCUR"}>Options on Currency</option>
+
           </CFormSelect>
         </CCol>
         <CCol sm={4}>
@@ -182,8 +187,6 @@ const Watchlist = () => {
             <span aria-hidden="true">&raquo;</span>
           </CPaginationItem>
         </CPagination>
-        
-        
       </CRow>
     </>
   )
