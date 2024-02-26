@@ -101,7 +101,7 @@ const Portfolio = () => {
   const [data, setData] = useState([])
   const [orderType,setOrderType] = useState('open')
   const [bidAskPrice,setBidAskPrice] = useState([])
-  const [intraday, setIntraday] = useState(false)
+  const [intraday, setIntraday] = useState(null)
 
 
   
@@ -193,6 +193,7 @@ const Portfolio = () => {
 
 
   const fetchTradesIntraDayData = async (intraday_type) => {
+    setOrderType('open')
     setIntraday(intraday_type)
     console.log("mmmmnishhhh"+intraday)
     try {
@@ -203,8 +204,6 @@ const Portfolio = () => {
 
       const response = await axios.get(`http://139.59.39.167/api/v1/order/filter/user/${userId}/intraday/${intraday_type}`, { headers:headers });
       
-      
-      setOrderType(orderType)
       setFetchDataCalled(false)
       const jsonData = response
       console.log(jsonData.data)
