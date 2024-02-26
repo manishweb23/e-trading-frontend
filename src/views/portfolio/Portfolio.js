@@ -10,6 +10,7 @@ import {
   CAvatar,
   CButton,
   CButtonGroup,
+  CFormCheck,
   CCard,
   CCardBody,
   CCardFooter,
@@ -82,7 +83,17 @@ const decodeProfobuf = (buffer) => {
 
 
 const Portfolio = () => {
-  
+
+  const userDataString = localStorage.getItem('userData')
+  let userData = JSON.parse(userDataString) 
+  userData = JSON.parse(userData) 
+  console.log(userData)
+  let userToken = userData.data.token
+  console.log(userToken)
+  const userId = userData.data.user_id
+
+
+  const [pl,setPL] = useState(0)
   const [isConnected, setIsConnected] = useState(false);
   const [fetchDataCalled, setFetchDataCalled] = useState(true);
   const [feedData, setFeedData] = useState([]);
@@ -90,14 +101,15 @@ const Portfolio = () => {
   const [data, setData] = useState([])
   const [orderType,setOrderType] = useState('open')
   const [bidAskPrice,setBidAskPrice] = useState([])
+  const [intraday, setIntraday] = useState(false)
 
 
   
   const navigate = useNavigate()
-
+  var totalPL = 0
   useEffect(() => {
     if(fetchDataCalled){
-      fetchData(orderType);
+      fetchTradesData(orderType);
     }
     if(openSymbols.length > 0){
       initProtobuf();  
@@ -135,6 +147,7 @@ const Portfolio = () => {
         const arrayBuffer = await blobToArrayBuffer(event.data);
         let buffer = Buffer.from(arrayBuffer);
         let response = decodeProfobuf(buffer);
+        console.log('mmkkkmanishhh')
         setFeedData(response.feeds)
         console.log(feedData)
       };
@@ -150,30 +163,53 @@ const Portfolio = () => {
     }
   };  
 
-  const fetchData = async (orderType) => {
-    const userDataString = localStorage.getItem('userData')
-    let userData = JSON.parse(userDataString) 
-    userData = JSON.parse(userData) 
-    console.log(userData)
-    let userToken = userData.data.token
-    console.log(userToken)
-    const userId = userData.data.user_id
-    setOrderType(orderType)
-    setFetchDataCalled(false)
-
+  const fetchTradesData = async (orderType) => {
 
     try {
       const headers = {
         'Content-Type':'application/json',
         'Authorization': `Bearer ${userToken}`
       }
+
       const response = await axios.get(`http://139.59.39.167/api/v1/order/filter/user/${userId}/type/${orderType}`, { headers:headers });
+      
+      
+      setOrderType(orderType)
+      setFetchDataCalled(false)
       const jsonData = response
-      console.log("manig")
       console.log(jsonData.data)
       setData(jsonData.data.data)
       if(orderType == 'open'){
-        const extractedSymbols = jsonData.data.map(item => item.symbol);
+        const extractedSymbols = jsonData.data.data.map(item => item.symbol);
+        console.log(extractedSymbols)
+        setOpenSymbols(extractedSymbols);
+      }
+      
+      console.log(jsonData.data)
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+
+  const fetchTradesIntraDayData = async (intraday) => {
+
+    try {
+      const headers = {
+        'Content-Type':'application/json',
+        'Authorization': `Bearer ${userToken}`
+      }
+
+      const response = await axios.get(`http://139.59.39.167/api/v1/order/filter/user/${userId}/intraday/${intraday}`, { headers:headers });
+      
+      
+      setOrderType(orderType)
+      setFetchDataCalled(false)
+      const jsonData = response
+      console.log(jsonData.data)
+      setData(jsonData.data.data)
+      if(orderType == 'open'){
+        const extractedSymbols = jsonData.data.data.map(item => item.symbol);
         console.log(extractedSymbols)
         setOpenSymbols(extractedSymbols);
       }
@@ -211,16 +247,27 @@ const Portfolio = () => {
   }
 
   
+
+  
   return (
     <>
       <CRow>
         {/* <CCol sm={3}/> */}
         <CCol sm={3}>
-          <CFormSelect value={orderType} onChange={(e) => fetchData(e.target.value)}>
-            <option value={"open"}>Open</option>
-            <option value={"close"}>Closed</option>
-            <option value={"all"}>All</option>
+          <CFormSelect value={orderType} onChange={(e) => fetchTradesData(e.target.value)}>
+            <option value={"open"}>Open Trades</option>
+            <option value={"close"}>Closed Trades</option>
+            <option value={"all"}>All Trades</option>
           </CFormSelect>
+        </CCol>
+        <CCol sm={6}>
+          <CFormSelect value={intraday} onChange={(e) => fetchTradesIntraDayData(e.target.value)}>
+            <option value={null}>Select Intraday/Holdings trades</option>
+            <option value={true}>Intraday Trades</option>
+            <option value={false}>Holding Trades</option>
+          </CFormSelect>
+        </CCol>
+        <CCol sm={1}>
         </CCol>
       </CRow>
       <CRow>
@@ -238,7 +285,7 @@ const Portfolio = () => {
                     <CTableHeaderCell>Expiry</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Entry Price</CTableHeaderCell>
                     {orderType != 'all' &&(
-                    <CTableHeaderCell className="text-center">P & L</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center" >P & L</CTableHeaderCell>
                     )}
 
                     <CTableHeaderCell className="text-center">Exit Price</CTableHeaderCell>
@@ -271,14 +318,20 @@ const Portfolio = () => {
                       <CTableDataCell>
                         <div>{item.open_price}</div>
                       </CTableDataCell>
-                      {orderType === 'open' &&(
-                      <CTableDataCell>
-                      {<div>{feedData[item.symbol]?(findAskPrice(feedData[item.symbol].ff.marketFF.marketLevel.bidAskQuote)*item.lot_size*item.quantity - item.open_price*item.lot_size*item.quantity).toFixed(3):0 }</div> }
+                      {orderType === 'open' && item.order_short == true &&(
+                      <CTableDataCell style={{with:'auto'}}>
+                      {<div id={'pl'+index} style={{with:'200'}}>{feedData[item.symbol]?(findAskPrice(feedData[item.symbol].ff.marketFF.marketLevel.bidAskQuote)*item.lot_size*item.quantity - item.open_price*item.lot_size*item.quantity).toFixed(2):0 }</div> }
+                      
+                      </CTableDataCell>
+                      )}
+                      {orderType === 'open' && item.order_short == false &&(
+                      <CTableDataCell  style={{with:'auto'}}>
+                      {<div id={'pl'+index} style={{with:'200'}}>{feedData[item.symbol]?(findBidPrice(feedData[item.symbol].ff.marketFF.marketLevel.bidAskQuote)*item.lot_size*item.quantity - item.open_price*item.lot_size*item.quantity).toFixed(2):0 }</div> }
                       </CTableDataCell>
                       )}
                       {orderType === 'close' &&(
                       <CTableDataCell>
-                      {<div>{(item.close_price*item.lot_size*item.quantity - item.open_price*item.lot_size*item.quantity).toFixed(3)}</div> }
+                      {<div>{(item.close_price*item.lot_size*item.quantity - item.open_price*item.lot_size*item.quantity).toFixed(2)}</div> }
                       
                       </CTableDataCell>
                       )}

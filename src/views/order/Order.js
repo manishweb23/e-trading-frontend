@@ -9,6 +9,7 @@ import {
   CAccordion,
   CFormInput,  
   CFormSelect,
+  CFormCheck,
   CAvatar,
   CButton,
   CButtonGroup,
@@ -91,9 +92,9 @@ const Order = () => {
   let userToken = userData.data.token
   console.log(userToken)
   const userId = userData.data.user_id
-
   const navigate = useNavigate()
   const [isConnected, setIsConnected] = useState(false);
+  const [intraday,setIntraday] = useState(true)
   const [balance,setBalance] = useState(0)
   const [feedData, setFeedData] = useState([]);
   const [tradingSymbol, setTradingSymbol] = useState('');
@@ -227,6 +228,7 @@ const Order = () => {
       "exchange": tradingSymbolsArray[11],
       "trade_type": tradingSymbolsArray[9],
       "order_short": isOrderShort,
+      "is_intraday":intraday,
       "expiry_date": tradingSymbolsArray[5],
       "quantity": totalQuantity,
       "lot_size": tradingSymbolsArray[8],
@@ -247,7 +249,7 @@ const Order = () => {
       alert(msg)
       console.log(response.data)
       if(msg != "Insuficeint balance!"){
-        navigate(`/close-order`)
+        navigate(`/portfolio`)
       }
         
     } catch (error) {
@@ -408,19 +410,28 @@ const Order = () => {
           <CRow>
             <CCol sm={12}>
               <br/>
-            <CInputGroup className="mb-3">
+            <CInputGroup >
               
               <CInputGroupText id="basic-addon1">Lot Size : {tradingSymbolsArray[8]} x</CInputGroupText>
               <CFormInput value={totalQuantity} onChange={(e) => setTotalQuantity(e.target.value)}placeholder="Quantity" aria-label="Quantity" aria-describedby="basic-addon1"/>
             
             </CInputGroup>
             </CCol>
-          </CRow>
-          <CRow>
-            <CCol sm={12}>
+            <CCol sm={12} className="mb-3">
             <CInputGroupText id="basic-addon1">Quantity x Lot Size : {tradingSymbolsArray[8] * totalQuantity} </CInputGroupText>
             
             </CCol>
+          </CRow>
+          <CRow>
+            <CCol sm={2}></CCol>
+            <CCol sm={4} className="mb-3">
+              <CFormCheck button={{ color: 'primary', variant: 'outline' }} type="radio" name="options-outlined" id="success-outlined" autoComplete="off" label="Intraday" onClick={(e)=> setIntraday(true)}/>
+            </CCol>
+            <CCol sm={4}>
+              <CFormCheck button={{ color: 'primary', variant: 'outline' }} type="radio" name="options-outlined" id="danger-outlined" autoComplete="off" label="Delivery" defaultChecked onClick={(e)=> setIntraday(false)}/>
+            </CCol>
+          </CRow>
+          <CRow>
             <CCol sm={12}>
             <CInputGroupText id="basic-addon1">Bid Price : {bidPrice} </CInputGroupText>
             <CInputGroupText id="basic-addon1">Ask Price : {askPrice} </CInputGroupText>
