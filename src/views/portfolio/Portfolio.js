@@ -192,15 +192,16 @@ const Portfolio = () => {
   };
 
 
-  const fetchTradesIntraDayData = async (intraday) => {
-
+  const fetchTradesIntraDayData = async (intraday_type) => {
+    setIntraday(intraday_type)
+    console.log("mmmmnishhhh"+intraday)
     try {
       const headers = {
         'Content-Type':'application/json',
         'Authorization': `Bearer ${userToken}`
       }
 
-      const response = await axios.get(`http://139.59.39.167/api/v1/order/filter/user/${userId}/intraday/${intraday}`, { headers:headers });
+      const response = await axios.get(`http://139.59.39.167/api/v1/order/filter/user/${userId}/intraday/${intraday_type}`, { headers:headers });
       
       
       setOrderType(orderType)
@@ -260,7 +261,7 @@ const Portfolio = () => {
             <option value={"all"}>All Trades</option>
           </CFormSelect>
         </CCol>
-        <CCol sm={6}>
+        <CCol sm={5}>
           <CFormSelect value={intraday} onChange={(e) => fetchTradesIntraDayData(e.target.value)}>
             <option value={null}>Select Intraday/Holdings trades</option>
             <option value={true}>Intraday Trades</option>
