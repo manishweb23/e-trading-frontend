@@ -83,8 +83,18 @@ const decodeProfobuf = (buffer) => {
 };
 
 const Order = () => {  
+
+  const userDataString = localStorage.getItem('userData')
+  let userData = JSON.parse(userDataString) 
+  userData = JSON.parse(userData) 
+  console.log(userData)
+  let userToken = userData.data.token
+  console.log(userToken)
+  const userId = userData.data.user_id
+
   const navigate = useNavigate()
   const [isConnected, setIsConnected] = useState(false);
+  const [balance,setBalance] = useState(0)
   const [feedData, setFeedData] = useState([]);
   const [tradingSymbol, setTradingSymbol] = useState('');
   const [ltpcData, setLtpcData] = useState(null);
@@ -195,6 +205,7 @@ const Order = () => {
     
     connectWebSocket(token,tradingSymbolsArray[0]);
 
+    fetchBalance(userId)
     return () => {
       // Perform cleanup (unsubscribe, clear intervals, etc.)
     }
@@ -202,14 +213,12 @@ const Order = () => {
 
   
   const openOrder = async () => {
-    const userDataString = localStorage.getItem('userData')
-    let userData = JSON.parse(userDataString) 
-    userData = JSON.parse(userData) 
-    console.log(userData)
-    let userToken = userData.data.token
-    console.log(userToken)
-    const userId = userData.data.user_id
-  
+    if((balance - (bidPrice*tradingSymbolsArray[8]*totalQuantity) < 0)  && isOrderShort == false){
+      alert("Insufficient Balance!")
+    }
+    if((balance - (askPrice*tradingSymbolsArray[8]*totalQuantity) < 0) && isOrderShort == true){
+      alert("Insufficient Balance!")
+    }
     // setLoading(true)
     const postData = {
       "user_id": userId,
@@ -253,6 +262,29 @@ const Order = () => {
     setIsOrderShort(true)
     openOrder()
   }
+
+  const fetchBalance = async (userId) =>{
+    const url = `http://139.59.39.167/api/v1/transaction/user/${userId}/balance`;
+    // Set the headers with the Bearer token
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    };
+
+    // Make the GET request using Axios
+    axios.get(url, config)
+      .then(response => {
+        // Handle the successful response
+        console.log('Balance:', response.data.data.balance);
+        setBalance(response.data.data.balance)
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error fetching balance:', error);
+    });
+  }
+  
 
   return (
     <>    
@@ -392,7 +424,7 @@ const Order = () => {
             <CCol sm={12}>
             <CInputGroupText id="basic-addon1">Bid Price : {bidPrice} </CInputGroupText>
             <CInputGroupText id="basic-addon1">Ask Price : {askPrice} </CInputGroupText>
-            
+            <CInputGroupText id="basic-addon1">Available Balance : INR {balance} </CInputGroupText>
             </CCol>
           </CRow>
           <CRow>
@@ -404,6 +436,12 @@ const Order = () => {
             <CCol sm={4}>
               <br/>
               <CButton color="danger" style={{width:'100%'}} onClick={(e) => openSellOrder()}>Sell</CButton>
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol sm={12}>
+              <br/>
+            <p style={{fontSize:'12px'}}>Buy Total Amount: <b>{(bidPrice*tradingSymbolsArray[8]*totalQuantity).toFixed(2)}</b> | Sell Total Amount: <b>{(askPrice*tradingSymbolsArray[8]*totalQuantity).toFixed(2)}</b></p>
             </CCol>
           </CRow>
             {/* <div className="d-grid gap-2">
