@@ -247,7 +247,7 @@ const Order = () => {
       alert(msg)
       console.log(response.data)
       if(msg != "Insuficeint balance!"){
-        navigate(`/portfolio`)
+        navigate(`/close-order`)
       }
         
     } catch (error) {
