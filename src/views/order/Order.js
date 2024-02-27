@@ -94,7 +94,7 @@ const Order = () => {
   const userId = userData.data.user_id
   const navigate = useNavigate()
   const [isConnected, setIsConnected] = useState(false);
-  const [intraday,setIntraday] = useState(true)
+  const [intraday,setIntraday] = useState('true')
   const [balance,setBalance] = useState(0)
   const [feedData, setFeedData] = useState([]);
   const [tradingSymbol, setTradingSymbol] = useState('');
@@ -228,7 +228,7 @@ const Order = () => {
       "exchange": tradingSymbolsArray[11],
       "trade_type": tradingSymbolsArray[9],
       "order_short": isOrderShort,
-      "is_intraday":intraday,
+      "is_intraday":intraday === 'true'?true:false,
       "expiry_date": tradingSymbolsArray[5],
       "quantity": totalQuantity,
       "lot_size": tradingSymbolsArray[8],
@@ -412,8 +412,8 @@ const Order = () => {
               <br/>
             <CInputGroup >
               
-              <CInputGroupText id="basic-addon1">Lot Size : {tradingSymbolsArray[8]} x</CInputGroupText>
-              <CFormInput value={totalQuantity} onChange={(e) => setTotalQuantity(e.target.value)}placeholder="Quantity" aria-label="Quantity" aria-describedby="basic-addon1"/>
+              <CInputGroupText id="basic-addon1"  size="sm" >Lot Size : {tradingSymbolsArray[8]} x</CInputGroupText>
+              <CFormInput   size="sm" value={totalQuantity} onChange={(e) => setTotalQuantity(e.target.value)}placeholder="Quantity" aria-label="Quantity" aria-describedby="basic-addon1"/>
             
             </CInputGroup>
             </CCol>
@@ -421,15 +421,17 @@ const Order = () => {
             <CInputGroupText id="basic-addon1">Quantity x Lot Size : {tradingSymbolsArray[8] * totalQuantity} </CInputGroupText>
             
             </CCol>
-          </CRow>
-          <CRow>
-            <CCol sm={2}></CCol>
-            <CCol sm={4} className="mb-3">
-              <CFormCheck button={{ color: 'primary', variant: 'outline' }} type="radio" name="options-outlined" id="success-outlined" autoComplete="off" label="Intraday"
-             onClick={(e)=> setIntraday(true)}/>
-            </CCol>
-            <CCol sm={4}>
-              <CFormCheck button={{ color: 'primary', variant: 'outline' }} type="radio" name="options-outlined" id="danger-outlined" autoComplete="off" label="Delivery"  defaultChecked onClick={(e)=> setIntraday(false)}/>
+          {/* </CRow>
+          <CRow> */}
+            <CCol sm={12} className="mb-3">
+            <CInputGroup  size="sm">
+              
+              <CInputGroupText id="basic-addon1" style={{height:'34.5px'}} size="sm" >Intraday / Delivery :</CInputGroupText>
+              <CFormSelect size="sm" value = {intraday} className="mb-3" aria-label="Small select example" onChange={(e)=> setIntraday(e.target.value)}>
+                <option value="false">Delivery</option>
+                <option value="true">Intraday</option>
+              </CFormSelect>
+            </CInputGroup>
             </CCol>
           </CRow>
           <CRow>

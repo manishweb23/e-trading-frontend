@@ -257,36 +257,54 @@ const Portfolio = () => {
       <CRow>
         {/* <CCol sm={2}/> */}
         <CCol sm={12}>
-        <CNav className="justify-content-end" >
-          <CNavItem >
-            <CNavLink style={{ cursor: 'pointer' }} value={orderType} onClick={(e) => fetchTradesData('open')}>
+        <CNav variant="underline">
+          <CNavItem>
+            <CNavLink value={orderType} onClick={(e) => fetchTradesData('open')}>
               Open
             </CNavLink>
           </CNavItem>
-          <CNavItem >
-            <CNavLink style={{ cursor: 'pointer' }} value={orderType} onClick={(e) => fetchTradesData('close')}>Close</CNavLink>
+          <CNavItem>
+            <CNavLink value={orderType} onClick={(e) => fetchTradesData('close')}>Close</CNavLink>
           </CNavItem>
-          <CNavItem >
-            <CNavLink style={{ cursor: 'pointer' }} value={orderType} onClick={(e) => fetchTradesData('all')}>All</CNavLink>
+          <CNavItem>
+            <CNavLink value={orderType} onClick={(e) => fetchTradesData('all')}>All</CNavLink>
           </CNavItem>
-          <CNavItem >
-            <CNavLink style={{ cursor: 'pointer' }} value={intraday} onClick={(e) => fetchTradesIntraDayData(true)}>
+          <CNavItem>
+            <CNavLink value={intraday} onClick={(e) => fetchTradesIntraDayData(true)}>
               Intraday
             </CNavLink>
           </CNavItem>
-          <CNavItem >
-            <CNavLink style={{ cursor: 'pointer' }} value={intraday} onClick={(e) => fetchTradesIntraDayData(false)}>
+          <CNavItem>
+            <CNavLink value={intraday} onClick={(e) => fetchTradesIntraDayData(false)}>
               Delivery
             </CNavLink>
           </CNavItem>
         </CNav>
         </CCol>
       </CRow>
-      
+      <CRow>
+        {/* <CCol sm={3}/> */}
+        <CCol sm={3}>
+          <CFormSelect value={orderType} onChange={(e) => fetchTradesData(e.target.value)}>
+            <option value={"open"}>Open Trades</option>
+            <option value={"close"}>Closed Trades</option>
+            <option value={"all"}>All Trades</option>
+          </CFormSelect>
+        </CCol>
+        <CCol sm={5}>
+          <CFormSelect value={intraday} onChange={(e) => fetchTradesIntraDayData(e.target.value)}>
+            <option value={null}>Select Intraday/Holdings trades</option>
+            <option value={true}>Intraday Trades</option>
+            <option value={false}>Holding Trades</option>
+          </CFormSelect>
+        </CCol>
+        <CCol sm={1}>
+        </CCol>
+      </CRow>
       <CRow>
         <CCol xs>
           <CCard className="mb-4">
-            <CCardHeader>Portfolio | {orderType == 'open'?"Open":''}{orderType == 'close'?"Close":''}{orderType == 'all'?"All":''} Trades {orderType == 'open' &&(<>{intraday==true?"| Intraday Trades":""}{intraday==false?"| Delivery Trades":""}</>)}</CCardHeader>
+            <CCardHeader>Portfolio</CCardHeader>
             <CCardBody>
               <CTable align="middle" className="mb-0 border" hover responsive striped>
                 <CTableHead color="light">
