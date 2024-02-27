@@ -107,6 +107,7 @@ const Watchlist = () => {
             <option value={"OPTCOM"}>Option on Commodity</option>
             <option value={"FUTCUR"}>Futures on Currency</option>
             <option value={"OPTCUR"}>Options on Currency</option>
+            <option value={"EQUITY"}>Equity</option>
 
           </CFormSelect>
         </CCol>
@@ -166,28 +167,6 @@ const Watchlist = () => {
           </CCard>
         </CCol>
       </CRow>
-      {/* <CRow>
-        
-
-        <CPagination aria-label="Page navigation example">
-          <CPaginationItem aria-label="Previous" disabled>
-            <span aria-hidden="true">&laquo;</span>
-          </CPaginationItem>
-          
-          {instruments.length !== 0 &&(
-            <>
-            {[...Array(pageSize)].map((_, index) => (
-              <CPaginationItem key={index} active={currentPage === index + 1} onClick={(index)=>setCurrentPage(index)}>
-                {index + 1}
-              </CPaginationItem>
-            ))}
-            </>
-            )}
-          <CPaginationItem aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </CPaginationItem>
-        </CPagination>
-      </CRow> */}
     </>
   )
 }

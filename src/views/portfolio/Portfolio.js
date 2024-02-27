@@ -198,7 +198,6 @@ const Portfolio = () => {
   const fetchTradesIntraDayData = async (intraday_type) => {
     setOrderType('open')
     setIntraday(intraday_type)
-    console.log("mmmmnishhhh"+intraday)
     try {
       const headers = {
         'Content-Type':'application/json',
