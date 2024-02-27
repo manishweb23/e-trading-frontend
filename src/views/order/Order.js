@@ -425,10 +425,11 @@ const Order = () => {
           <CRow>
             <CCol sm={2}></CCol>
             <CCol sm={4} className="mb-3">
-              <CFormCheck button={{ color: 'primary', variant: 'outline' }} type="radio" name="options-outlined" id="success-outlined" autoComplete="off" label="Intraday" onClick={(e)=> setIntraday(true)}/>
+              <CFormCheck button={{ color: 'primary', variant: 'outline' }} type="radio" name="options-outlined" id="success-outlined" autoComplete="off" label="Intraday"
+             onClick={(e)=> setIntraday(true)}/>
             </CCol>
             <CCol sm={4}>
-              <CFormCheck button={{ color: 'primary', variant: 'outline' }} type="radio" name="options-outlined" id="danger-outlined" autoComplete="off" label="Delivery" defaultChecked onClick={(e)=> setIntraday(false)}/>
+              <CFormCheck button={{ color: 'primary', variant: 'outline' }} type="radio" name="options-outlined" id="danger-outlined" autoComplete="off" label="Delivery"  defaultChecked onClick={(e)=> setIntraday(false)}/>
             </CCol>
           </CRow>
           <CRow>
