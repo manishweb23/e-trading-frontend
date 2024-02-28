@@ -455,7 +455,7 @@ const Order = () => {
           <CRow>
             <CCol sm={12}>
               <br/>
-            <p style={{fontSize:'12px'}}>Buy Total Amount: <b>{(bidPrice*tradingSymbolsArray[8]*totalQuantity).toFixed(2)}</b> | Sell Total Amount: <b>{(askPrice*tradingSymbolsArray[8]*totalQuantity).toFixed(2)}</b></p>
+            <p style={{fontSize:'12px'}}>Buy Total Amount: <b>{(askPrice*tradingSymbolsArray[8]*totalQuantity).toFixed(2)}</b> | Sell Total Amount: <b>{(bidPrice*tradingSymbolsArray[8]*totalQuantity).toFixed(2)}</b></p>
             </CCol>
           </CRow>
             {/* <div className="d-grid gap-2">
