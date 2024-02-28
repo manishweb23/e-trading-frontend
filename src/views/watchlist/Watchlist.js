@@ -108,7 +108,6 @@ const Watchlist = () => {
             <option value={"FUTCUR"}>Futures on Currency</option>
             <option value={"OPTCUR"}>Options on Currency</option>
             <option value={"EQUITY"}>Equity</option>
-
           </CFormSelect>
         </CCol>
         <CCol sm={4}>
@@ -118,8 +117,8 @@ const Watchlist = () => {
         </CCol>
         <CCol sm={2}>
           <div className="d-grid gap-2">
-              <CButton color="success" onClick={handleInstrumentSearch}>Search</CButton>
-            </div>
+            <CButton color="success" onClick={handleInstrumentSearch}>Search</CButton>
+          </div>
         </CCol>
       </CRow>
       <CRow>
@@ -139,7 +138,6 @@ const Watchlist = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  
                   {instruments.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
