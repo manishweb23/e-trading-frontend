@@ -287,17 +287,17 @@ const Portfolio = () => {
           <CCard className="mb-4">
             <CCardHeader>Portfolio | {orderType == 'open'?"Open":''}{orderType == 'close'?"Close":''}{orderType == 'all'?"All":''} Trades {orderType == 'open' &&(<>{intraday==true?"| Intraday Trades":""}{intraday==false?"| Delivery Trades":""}</>)}</CCardHeader>
             <CCardBody>
-              <CTable align="middle" className="mb-0 border" hover responsive striped>
+              <CTable align="middle" className="mb-0 border" hover striped>
                 <CTableHead color="light">
                   <CTableRow>
                     {/* <CTableHeaderCell>Symbol</CTableHeaderCell> */}
-                    <CTableHeaderCell>Trading Symbol</CTableHeaderCell>
+                    <CTableHeaderCell >Trading Symbol</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Lot Size</CTableHeaderCell>
                     <CTableHeaderCell>Quantity</CTableHeaderCell>
                     <CTableHeaderCell>Expiry</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Entry Price</CTableHeaderCell>
                     {orderType != 'all' &&(
-                    <CTableHeaderCell className="text-center" >P & L</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center" style={{minWidth:'250px'}}>P & L</CTableHeaderCell>
                     )}
 
                     <CTableHeaderCell className="text-center">Exit Price</CTableHeaderCell>
@@ -331,13 +331,13 @@ const Portfolio = () => {
                         <div>{item.open_price}</div>
                       </CTableDataCell>
                       {orderType === 'open' && item.order_short == true &&(
-                      <CTableDataCell style={{with:'auto'}}>
+                      <CTableDataCell style={{with:'auto'}} className="text-center">
                       {<div id={'pl'+index} style={{with:'200'}}>{feedData[item.symbol]?(findAskPrice(feedData[item.symbol].ff.marketFF.marketLevel.bidAskQuote)*item.lot_size*item.quantity - item.open_price*item.lot_size*item.quantity).toFixed(2):0 }</div> }
                       
                       </CTableDataCell>
                       )}
                       {orderType === 'open' && item.order_short == false &&(
-                      <CTableDataCell  style={{with:'auto'}}>
+                      <CTableDataCell  style={{with:'auto'}} className="text-center">
                       {<div id={'pl'+index} style={{with:'200'}}>{feedData[item.symbol]?(findBidPrice(feedData[item.symbol].ff.marketFF.marketLevel.bidAskQuote)*item.lot_size*item.quantity - item.open_price*item.lot_size*item.quantity).toFixed(2):0 }</div> }
                       </CTableDataCell>
                       )}
