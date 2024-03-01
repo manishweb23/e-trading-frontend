@@ -412,13 +412,13 @@ const Order = () => {
               <br/>
             <CInputGroup >
               
-              <CInputGroupText id="basic-addon1"  size="sm" >Lot Size : {tradingSymbolsArray[8]} x</CInputGroupText>
+              <CInputGroupText id="basic-addon1"  size="sm" >{tradingSymbolsArray[9]=='EQUITY'?'Shares':'Lot Size'} : {tradingSymbolsArray[8]} x</CInputGroupText>
               <CFormInput   size="sm" value={totalQuantity} onChange={(e) => setTotalQuantity(e.target.value)}placeholder="Quantity" aria-label="Quantity" aria-describedby="basic-addon1"/>
             
             </CInputGroup>
             </CCol>
             <CCol sm={12} className="mb-3">
-            <CInputGroupText id="basic-addon1">Quantity x Lot Size : {tradingSymbolsArray[8] * totalQuantity} </CInputGroupText>
+            <CInputGroupText id="basic-addon1">Quantity x {tradingSymbolsArray[9]=='EQUITY'?'Shares':'Lot Size'} : {tradingSymbolsArray[8] * totalQuantity} </CInputGroupText>
             
             </CCol>
           {/* </CRow>
