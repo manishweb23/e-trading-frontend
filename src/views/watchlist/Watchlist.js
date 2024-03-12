@@ -131,10 +131,11 @@ const Watchlist = () => {
                   <CTableRow>
                     <CTableHeaderCell>Symbol</CTableHeaderCell>
                     <CTableHeaderCell className="text-center">Type</CTableHeaderCell>
-                    
-                    <CTableHeaderCell>Expiry</CTableHeaderCell>
+                    {instrumentsType !== 'EQUITY' && (
+                      <CTableHeaderCell>Expiry</CTableHeaderCell>
+                    )}
                     <CTableHeaderCell>Last Price</CTableHeaderCell>
-                    <CTableHeaderCell className="text-center">Order</CTableHeaderCell>
+                    <CTableHeaderCell className="text-center">Action</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
@@ -146,9 +147,11 @@ const Watchlist = () => {
                       <CTableDataCell className="text-center">
                         <div>{item[11].replace(/_/g, " ")}</div>
                       </CTableDataCell>
+                      {instrumentsType !== 'EQUITY' && (
                       <CTableDataCell className="text-center">
                         <div>{item[5]}</div>
                       </CTableDataCell>
+                      )}
                       <CTableDataCell>
                         <div>{item[4]}</div>
                       </CTableDataCell>
